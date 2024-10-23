@@ -1,11 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { API_RESPONSE_EXAMPLE } from './RESPONSE';
-const OUTDOORSY_API_ENDPOINT = "https://search.outdoorsy.com/rentals/410504";
+const OUTDOORSY_API_ENDPOINT = "https://search.outdoorsy.com/rentals/";
 
 type ApiResponse = typeof API_RESPONSE_EXAMPLE
 
+export const Image: React.FC<{ src: string }> = ({ src }) => {
+    return (
+        <div>
+            {src ? (
+                <img src={src} alt="Fetched image" style={{
+                    // maxWidth: "100%",
+                    height: "auto",
+                    maxHeight: "300px",
+                    objectFit: "contain"
+                }} />
+            ) : (
+                <div>No image source found</div>
+            )}
+        </div>
+    );
+}
 
-const LinkFetcher: React.FC = () => {
+
+const ListingFetcher: React.FC<{ rentalId: number }> = ({ rentalId = 410504 }) => {
     const [link, setLink] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -14,7 +31,7 @@ const LinkFetcher: React.FC = () => {
         const fetchLink = async () => {
             try {
                 // Replace 'YOUR_API_ENDPOINT' with the actual API endpoint
-                const response = await fetch(OUTDOORSY_API_ENDPOINT);
+                const response = await fetch(OUTDOORSY_API_ENDPOINT + rentalId);
                 const data: ApiResponse = await response.json();
 
                 const link = data.data.attributes.primary_image_url
@@ -37,8 +54,7 @@ const LinkFetcher: React.FC = () => {
     return (
         <div>
             {link ? (
-                <img src={link} rel="noopener noreferrer">
-                </img>
+                <Image src={link} />
             ) : (
                 <div>No link found</div>
             )}
@@ -46,4 +62,4 @@ const LinkFetcher: React.FC = () => {
     );
 };
 
-export default LinkFetcher;
+export default ListingFetcher;
