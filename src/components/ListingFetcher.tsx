@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { API_RESPONSE_EXAMPLE } from './RESPONSE';
+import { stringify } from 'querystring';
 const OUTDOORSY_API_ENDPOINT = "https://search.outdoorsy.com/rentals/";
+const OUTDOORSY_UI_ENDPOINT = "https://www.outdoorsy.com/";
 
 type Listing = typeof API_RESPONSE_EXAMPLE
 
@@ -36,14 +38,14 @@ const ListingFetcher: React.FC<{ rentalId: number }> = ({ rentalId = 410504 }) =
                 const data: Listing = await response.json();
 
                 const link = data.data.attributes.primary_image_url
-                const listing = data
+                const listing: Listing = data
                 console.log(link)
                 // Assuming the API response has a 'url' field
                 setLink(link);
                 setListing(listing);
                 setLoading(false);
             } catch (err) {
-                setError('Failed to fetch link');
+                setError('Failed to fetch listing for rental id ' + rentalId);
                 setLoading(false);
             }
         };
@@ -56,15 +58,26 @@ const ListingFetcher: React.FC<{ rentalId: number }> = ({ rentalId = 410504 }) =
 
     return (
         <div>
-            {link ? (
-                <>
+            {link && listing ? (
+                <a href={OUTDOORSY_UI_ENDPOINT + listing.data.attributes.slug}>
                     <Image src={link} />
-                    <div>Prep Fee: ${listing?.data.attributes.prep_fee.amount / 100}</div>
-                    <div>Nightly Rate: ${listing?.data.attributes.price_per_day / 100}</div>
+
+                    <div>
+                        Prep Fee: ${listing.data.attributes.prep_fee ? (listing.data.attributes.prep_fee.amount / 100) : 'N/A'}
+                    </div>
+                    <div>
+                        Nightly Rate: ${listing.data.attributes.price_per_day / 100}
+                    </div>
+                    {/* <div>location: {listing.data.attributes.location.state}</div> */}
+                    <div>
+                        Pet Friendly: {listing.data.attributes.features.pet_friendly ? 'Yes' : 'No'}
+                    </div>
+                    {/* <div>Slug: {listing.data.attributes.slug}</div> */}
                     <h2>Scores</h2>
-                    <div>Rental Score: {listing?.data.attributes.rental_score}</div>
-                    <div>Avg Reviews: {listing?.data.attributes.average_reviews}</div>
-                </>
+                    {/* <div>Reviews: {listing.data.attributes.average_reviews}</div> */}
+                    {/* <div>Rental Score: {listing.data.attributes.rental_score}</div> */}
+                    {/* <div>Avg Reviews: {listing.data.attributes.average_reviews}</div> */}
+                </a>
             ) : (
                 <div>No link found</div>
             )}

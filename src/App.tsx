@@ -3,10 +3,17 @@ import './App.css';
 import ListingFetcher from './components/ListingFetcher';
 
 function App() {
-  const [rentalIds, setRentalIds] = useState<string[]>([]);
+  const [rentalIds, setRentalIds] = useState<string[]>([
+    "293285",
+    "92515",
+  ]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const ids = event.target.value.split(',').map(id => id.trim());
+    console.log(event.target.value)
+
+    console.log("here")
+    const ids = event.target.value.split(' ')//.map(id => id.trim());
+    console.log(ids)
     setRentalIds(ids);
   };
 
@@ -33,9 +40,9 @@ function App() {
               <ListingFetcher rentalId={parseInt(rentalId, 10)} />
             </div>
           ))}
-          <div className="grid-item">
+          {/* <div className="grid-item">
             <ListingFetcher rentalId={410504} />
-          </div>
+          </div> */}
           {/* Add more grid items here as needed */}
         </div>
       </main>
