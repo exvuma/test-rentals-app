@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { API_RESPONSE_EXAMPLE } from './RESPONSE';
-import { stringify } from 'querystring';
+import { render } from '@testing-library/react';
 const OUTDOORSY_API_ENDPOINT = "https://search.outdoorsy.com/rentals/";
 const OUTDOORSY_UI_ENDPOINT = "https://www.outdoorsy.com/";
 
@@ -10,7 +10,7 @@ export const Image: React.FC<{ src: string }> = ({ src }) => {
     return (
         <div>
             {src ? (
-                <img src={src} alt="Fetched image" style={{
+                <img src={src} alt="Fetched listing hero" style={{
                     // maxWidth: "100%",
                     height: "auto",
                     maxHeight: "300px",
@@ -51,7 +51,7 @@ const ListingFetcher: React.FC<{ rentalId: number }> = ({ rentalId = 410504 }) =
         };
 
         fetchLink();
-    }, []);
+    }, [rentalId]);
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
