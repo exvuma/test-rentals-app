@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { API_RESPONSE_EXAMPLE } from './RESPONSE';
-import { render } from '@testing-library/react';
 const OUTDOORSY_API_ENDPOINT = "https://search.outdoorsy.com/rentals/";
 const OUTDOORSY_UI_ENDPOINT = "https://www.outdoorsy.com/";
 
